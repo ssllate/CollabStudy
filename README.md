@@ -1,6 +1,11 @@
-🌐 Live demo: https://ssllate.github.io/CollabStudy/
-
 # CollabStudy
+
+🌐 Live demo:  
+[![Open Site](https://img.shields.io/badge/Open%20Site-CollabStudy-blue?style=for-the-badge)](https://ssllate.github.io/CollabStudy/)
+
+---
+
+## 📌 О проекте
 CollabStudy — десктопное Electron-приложение для совместного обучения, управления проектами и общения студентов с офлайн-работой и локальным хранением данных.
 
 ---
