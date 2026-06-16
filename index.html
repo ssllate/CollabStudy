@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CollabStudy — Найди свою команду</title>
+  <!-- Fonts: non-blocking (display=swap + media trick) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <!-- Font Awesome: non-blocking -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  </noscript>
+  <link rel="stylesheet" href="src/css/base.css">
+  <link rel="stylesheet" href="src/css/layout.css">
+  <link rel="stylesheet" href="src/css/animations.css">
+  <link rel="stylesheet" href="src/css/views.css">
+  <link rel="stylesheet" href="src/css/components.css">
+  <link rel="stylesheet" href="src/css/modules.css">
+  <link rel="stylesheet" href="src/css/responsive.css">
+</head>
+<body>
+
+<!-- CANVAS PARTICLES -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- CURSOR GLOW -->
+<div id="cursor-glow"></div>
+
+<!-- ══════════════════════════════════════
+     NAVBAR
+══════════════════════════════════════ -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#" onclick="showView('home')">
+      <div class="logo-mark">
+        <svg viewBox="0 0 36 36" fill="none">
+          <rect width="36" height="36" rx="10" fill="url(#lg1)"/>
+          <path d="M10 24 L18 10 L26 24" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="18" cy="27" r="2.5" fill="white"/>
+          <defs><linearGradient id="lg1" x1="0" y1="0" x2="36" y2="36"><stop stop-color="#6EE7B7"/><stop offset="1" stop-color="#3B82F6"/></linearGradient></defs>
+        </svg>
+      </div>
+      <span class="logo-text">CollabStudy</span>
+    </a>
+
+    <div class="nav-links" id="nav-links">
+      <a href="#" class="nav-item" data-view="home"    onclick="showView('home')"><i class="fas fa-house-chimney"></i><span>Главная</span></a>
+      <a href="#" class="nav-item" data-view="explore" onclick="showView('explore')"><i class="fas fa-compass"></i><span>Обзор</span></a>
+      <a href="#" class="nav-item" data-view="projects"onclick="showView('projects')"><i class="fas fa-layer-group"></i><span>Проекты</span></a>
+      <a href="#" class="nav-item" data-view="feed"    onclick="showView('feed')"><i class="fas fa-bolt"></i><span>Лента</span></a>
+    </div>
+
+    <div class="nav-actions">
+      <div id="guest-actions" style="display:flex;align-items:center;gap:8px;">
+        <button class="btn-ghost" onclick="openModal('login-modal')"><i class="fas fa-arrow-right-to-bracket"></i> Войти</button>
+        <button class="btn-primary-sm" onclick="openModal('register-modal')"><i class="fas fa-sparkles"></i> Начать</button>
+      </div>
+      <div id="user-actions" class="hidden">
+        <button class="nav-icon-btn" onclick="showView('messages')" id="msg-nav-btn" data-view="messages" title="Сообщения">
+          <i class="fas fa-envelope"></i>
+          <span class="notif-dot hidden" id="msg-dot"></span>
+        </button>
+        <button class="nav-icon-btn" onclick="showView('notifications')" id="notif-nav-btn" data-view="notifications" title="Уведомления">
+          <i class="fas fa-bell"></i>
+          <span class="notif-dot hidden" id="notif-dot"></span>
+        </button>
+        <div class="nav-user-pill" onclick="showView('profile')">
+          <div class="nav-avatar" id="nav-avatar">АА</div>
+          <span id="nav-username">Имя</span>
+          <i class="fas fa-chevron-down" style="font-size:.65rem;opacity:.5"></i>
+        </div>
+        <button class="btn-ghost-sm" onclick="logout()" title="Выйти"><i class="fas fa-right-from-bracket"></i></button>
+      </div>
+      <button class="theme-btn" onclick="toggleTheme()" id="theme-btn" title="Сменить тему">
+        <span class="theme-icon icon-moon"><i class="fas fa-moon"></i></span>
+        <span class="theme-icon icon-sun"><i class="fas fa-sun"></i></span>
+      </button>
+      <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     VIEW: HOME
+══════════════════════════════════════ -->
+<section id="view-home" class="view active">
+
+  <!-- HERO -->
+  <div class="hero-section">
+    <div class="hero-bg-orbs">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+    <div class="hero-content reveal-up">
+      <div class="hero-badge">
+        <span class="live-dot"></span>
+        <span id="hero-online-count">0</span> студентов онлайн
+      </div>
+      <h1 class="hero-title">
+        Найди команду.<br>
+        <span class="gradient-text">Создай проект.</span><br>
+        Вырасти вместе.
+      </h1>
+      <p class="hero-sub">Платформа для студентов, которые хотят больше - не просто учиться, но строить, создавать и масштабироваться вместе с единомышленниками.</p>
+      <div class="hero-cta">
+        <button class="btn-hero" onclick="openModal('register-modal')">
+          <span>Присоединиться бесплатно</span>
+          <i class="fas fa-arrow-right"></i>
+        </button>
+        <button class="btn-hero-ghost" onclick="showView('explore')">
+          <i class="fas fa-play-circle"></i>
+          <span>Смотреть людей</span>
+        </button>
+      </div>
+      <div class="hero-stats-row">
+        <div class="hstat"><span class="hstat-n" id="hs-users">0</span><span class="hstat-l">Пользователей</span></div>
+        <div class="hstat-div"></div>
+        <div class="hstat"><span class="hstat-n" id="hs-projects">0</span><span class="hstat-l">Проектов</span></div>
+        <div class="hstat-div"></div>
+        <div class="hstat"><span class="hstat-n" id="hs-collabs">0</span><span class="hstat-l">Коллабораций</span></div>
+      </div>
+    </div>
+    <div class="hero-visual reveal-right">
+      <div class="hero-card-stack">
+        <div class="hero-floating-card fc-1">
+          <div class="fc-avatar av-0">АП</div>
+          <div class="fc-info">
+            <div class="fc-name">Анна Петрова</div>
+            <div class="fc-tags"><span class="chip chip-green">Figma</span><span class="chip chip-blue">React</span></div>
+          </div>
+          <div class="fc-online"></div>
+        </div>
+        <div class="hero-floating-card fc-2">
+          <div class="fc-icon"><i class="fas fa-rocket"></i></div>
+          <div class="fc-proj-info">
+            <div class="fc-proj-name">FinTrack App</div>
+            <div class="fc-prog-wrap"><div class="fc-prog" style="width:65%"></div></div>
+            <div class="fc-prog-label">65% набрали команду</div>
+          </div>
+        </div>
+        <div class="hero-floating-card fc-3">
+          <i class="fas fa-handshake" style="color:var(--accent-amber);font-size:1.4rem"></i>
+          <span>+3 коллаборации сегодня</span>
+        </div>
+        <div class="hero-floating-card fc-4">
+          <div class="fc-skills-list">
+            <span class="chip chip-purple">Python</span>
+            <span class="chip chip-cyan">ML</span>
+            <span class="chip chip-orange">Design</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SKILL TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker-track" id="ticker-track">
+      <span>Python</span><span>•</span><span>JavaScript</span><span>•</span><span>React</span><span>•</span>
+      <span>UI/UX</span><span>•</span><span>Machine Learning</span><span>•</span><span>Node.js</span><span>•</span>
+      <span>Figma</span><span>•</span><span>Data Science</span><span>•</span><span>Go</span><span>•</span>
+      <span>Flutter</span><span>•</span><span>Маркетинг</span><span>•</span><span>Копирайтинг</span><span>•</span>
+      <span>SMM</span><span>•</span><span>Английский</span><span>•</span><span>TypeScript</span><span>•</span>
+      <span>Vue.js</span><span>•</span><span>DevOps</span><span>•</span><span>Django</span><span>•</span>
+      <!-- duplicate -->
+      <span>Python</span><span>•</span><span>JavaScript</span><span>•</span><span>React</span><span>•</span>
+      <span>UI/UX</span><span>•</span><span>Machine Learning</span><span>•</span><span>Node.js</span><span>•</span>
+      <span>Figma</span><span>•</span><span>Data Science</span><span>•</span><span>Go</span><span>•</span>
+      <span>Flutter</span><span>•</span><span>Маркетинг</span><span>•</span><span>Копирайтинг</span><span>•</span>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="section-wrap" id="how-it-works">
+    <div class="section-header-center">
+      <div class="section-eyebrow">Как это работает</div>
+      <h2 class="section-title">Три шага до первой коллаборации</h2>
+    </div>
+    <div class="steps-row">
+      <div class="step-item reveal-up" style="--d:.1s">
+        <div class="step-num">01</div>
+        <div class="step-icon-wrap"><i class="fas fa-user-astronaut"></i></div>
+        <h3>Заполни профиль</h3>
+        <p>Расскажи о своих навыках, целях и университете - это твоя витрина для других студентов</p>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step-item reveal-up" style="--d:.25s">
+        <div class="step-num">02</div>
+        <div class="step-icon-wrap"><i class="fas fa-magnifying-glass"></i></div>
+        <h3>Исследуй и ищи</h3>
+        <p>Просматривай профили по навыкам, интересам и целям - найди тех, кто дополняет тебя</p>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step-item reveal-up" style="--d:.4s">
+        <div class="step-num">03</div>
+        <div class="step-icon-wrap"><i class="fas fa-bolt-lightning"></i></div>
+        <h3>Коллаборируй</h3>
+        <p>Отправляй предложения, общайся, создавай проекты - и вместе стройте что-то значимое</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURED USERS PREVIEW -->
+  <div class="section-wrap alt-bg">
+    <div class="section-header-center">
+      <div class="section-eyebrow">Сообщество</div>
+      <h2 class="section-title">Активные участники</h2>
+    </div>
+    <div class="users-grid users-grid-centered" id="home-users-grid"></div>
+    <div style="text-align:center;margin-top:32px">
+      <button class="btn-outline" onclick="showView('explore')">Смотреть всех <i class="fas fa-arrow-right"></i></button>
+    </div>
+  </div>
+
+  <!-- FEATURED PROJECTS PREVIEW -->
+  <div class="section-wrap">
+    <div class="section-header-center">
+      <div class="section-eyebrow">Проекты</div>
+      <h2 class="section-title">Свежие проекты</h2>
+    </div>
+    <div class="projects-grid projects-grid-centered" id="home-projects-grid"></div>
+    <div style="text-align:center;margin-top:32px">
+      <button class="btn-outline" onclick="showView('projects')">Все проекты <i class="fas fa-arrow-right"></i></button>
+    </div>
+  </div>
+
+  <!-- SKILLS CLOUD -->
+  <div class="section-wrap alt-bg">
+    <div class="section-header-center">
+      <div class="section-eyebrow">Навыки</div>
+      <h2 class="section-title">Найди по интересу</h2>
+    </div>
+    <div class="skills-cloud" id="home-skills-cloud">
+      <button onclick="goToExploreSkill('Python')" class="skill-bubble sz-lg">🐍 Python</button>
+      <button onclick="goToExploreSkill('JavaScript')" class="skill-bubble sz-md">🌐 JavaScript</button>
+      <button onclick="goToExploreSkill('Дизайн')" class="skill-bubble sz-lg">🎨 Дизайн</button>
+      <button onclick="goToExploreSkill('React')" class="skill-bubble sz-sm">⚛️ React</button>
+      <button onclick="goToExploreSkill('Machine Learning')" class="skill-bubble sz-lg">🤖 ML</button>
+      <button onclick="goToExploreSkill('Маркетинг')" class="skill-bubble sz-md">📣 Маркетинг</button>
+      <button onclick="goToExploreSkill('Английский')" class="skill-bubble sz-md">🇬🇧 Английский</button>
+      <button onclick="goToExploreSkill('Data Science')" class="skill-bubble sz-sm">📊 Data Science</button>
+      <button onclick="goToExploreSkill('UI/UX')" class="skill-bubble sz-md">🖥 UI/UX</button>
+      <button onclick="goToExploreSkill('Node.js')" class="skill-bubble sz-sm">🟩 Node.js</button>
+      <button onclick="goToExploreSkill('Копирайтинг')" class="skill-bubble sz-md">✍️ Копирайтинг</button>
+      <button onclick="goToExploreSkill('Flutter')" class="skill-bubble sz-sm">📱 Flutter</button>
+      <button onclick="goToExploreSkill('DevOps')" class="skill-bubble sz-sm">🔧 DevOps</button>
+      <button onclick="goToExploreSkill('SMM')" class="skill-bubble sz-md">📱 SMM</button>
+    </div>
+  </div>
+
+  <!-- CATEGORIES / DIRECTIONS -->
+  <div class="section-wrap">
+    <div class="section-header-center">
+      <div class="section-eyebrow">Направления</div>
+      <h2 class="section-title">Кто есть на платформе</h2>
+      <p class="section-sub-text">Студенты из разных сфер - найди тех, кто дополнит тебя</p>
+    </div>
+    <div class="categories-grid">
+      <div class="cat-card" onclick="goToExploreSkill('Python')">
+        <div class="cat-icon" style="background:linear-gradient(135deg,rgba(110,231,183,.15),rgba(59,130,246,.1));color:var(--accent-green)"><i class="fas fa-code"></i></div>
+        <div class="cat-info">
+          <div class="cat-name">Разработка</div>
+          <div class="cat-desc">Frontend, Backend, Mobile, DevOps</div>
+        </div>
+        <div class="cat-arrow"><i class="fas fa-arrow-right"></i></div>
+      </div>
+      <div class="cat-card" onclick="goToExploreSkill('Дизайн')">
+        <div class="cat-icon" style="background:linear-gradient(135deg,rgba(167,139,250,.15),rgba(251,113,133,.1));color:var(--accent-purple)"><i class="fas fa-pen-ruler"></i></div>
+        <div class="cat-info">
+          <div class="cat-name">Дизайн</div>
+          <div class="cat-desc">UI/UX, Графика, Motion, Branding</div>
+        </div>
+        <div class="cat-arrow"><i class="fas fa-arrow-right"></i></div>
+      </div>
+      <div class="cat-card" onclick="goToExploreSkill('Machine Learning')">
+        <div class="cat-icon" style="background:linear-gradient(135deg,rgba(34,211,238,.15),rgba(59,130,246,.1));color:var(--accent-cyan)"><i class="fas fa-brain"></i></div>
+        <div class="cat-info">
+          <div class="cat-name">AI / Data Science</div>
+          <div class="cat-desc">ML, NLP, Computer Vision, Analytics</div>
+        </div>
+        <div class="cat-arrow"><i class="fas fa-arrow-right"></i></div>
+      </div>
+      <div class="cat-card" onclick="goToExploreSkill('Маркетинг')">
+        <div class="cat-icon" style="background:linear-gradient(135deg,rgba(251,191,36,.15),rgba(251,146,60,.1));color:var(--accent-amber)"><i class="fas fa-bullhorn"></i></div>
+        <div class="cat-info">
+          <div class="cat-name">Маркетинг</div>
+          <div class="cat-desc">SMM, Копирайтинг, Growth, PR</div>
+        </div>
+        <div class="cat-arrow"><i class="fas fa-arrow-right"></i></div>
+      </div>
+      <div class="cat-card" onclick="goToExploreSkill('Английский')">
+        <div class="cat-icon" style="background:linear-gradient(135deg,rgba(251,113,133,.15),rgba(167,139,250,.1));color:var(--accent-rose)"><i class="fas fa-earth-americas"></i></div>
+        <div class="cat-info">
+          <div class="cat-name">Языки и мягкие навыки</div>
+          <div class="cat-desc">Английский, Презентации, Leadership</div>
+        </div>
+        <div class="cat-arrow"><i class="fas fa-arrow-right"></i></div>
+      </div>
+      <div class="cat-card" onclick="goToExploreSkill('Flutter')">
+        <div class="cat-icon" style="background:linear-gradient(135deg,rgba(110,231,183,.1),rgba(163,230,53,.15));color:#a3e635"><i class="fas fa-mobile-screen"></i></div>
+        <div class="cat-info">
+          <div class="cat-name">Mobile</div>
+          <div class="cat-desc">Flutter, React Native, iOS, Android</div>
+        </div>
+        <div class="cat-arrow"><i class="fas fa-arrow-right"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TESTIMONIALS -->
+  <div class="section-wrap alt-bg">
+    <div class="section-header-center">
+      <div class="section-eyebrow">Истории</div>
+      <h2 class="section-title">Что говорят участники</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">«Благодаря CollabStudy нашёл фронтенд-разработчика за 2 дня. Теперь работаем над нашим первым продуктом вместе. Это просто магия!»</p>
+        <div class="testi-author">
+          <div class="testi-av av-2">МС</div>
+          <div>
+            <div class="testi-name">Михаил Сидоров</div>
+            <div class="testi-role">Backend-разработчик, МФТИ</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card testi-featured">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">«Меня поражает качество людей на платформе. Здесь нет случайных - только те, кто реально хочет делать что-то крутое. Уже участвую в трёх проектах!»</p>
+        <div class="testi-author">
+          <div class="testi-av av-0">АП</div>
+          <div>
+            <div class="testi-name">Анна Петрова</div>
+            <div class="testi-role">UX-дизайнер, НГУ</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">«Долго искала ML-инженера для своего стартапа. Здесь нашла за неделю. Теперь наш продукт уже в бете - без этого сервиса было бы намного сложнее.»</p>
+        <div class="testi-author">
+          <div class="testi-av av-3">ЕВ</div>
+          <div>
+            <div class="testi-name">Елена Васильева</div>
+            <div class="testi-role">Продакт-менеджер, ВШЭ</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEADERBOARD PREVIEW -->
+  <div class="section-wrap">
+    <div class="section-header-center">
+      <div class="section-eyebrow">Топ</div>
+      <h2 class="section-title">Лучшие участники недели</h2>
+      <p class="section-sub-text">По рейтингу и активности в сообществе</p>
+    </div>
+    <div class="leaderboard-list" id="home-leaderboard"></div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section-wrap alt-bg">
+    <div class="section-header-center">
+      <div class="section-eyebrow">FAQ</div>
+      <h2 class="section-title">Частые вопросы</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Это бесплатно?</span><i class="fas fa-plus"></i>
+        </button>
+        <div class="faq-a">Да, полностью бесплатно. Регистрируйся, заполняй профиль и начинай коллаборировать - никаких скрытых платежей и подписок.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Кто может зарегистрироваться?</span><i class="fas fa-plus"></i>
+        </button>
+        <div class="faq-a">Любой студент или молодой специалист. Платформа открыта для всех, кто хочет учиться, развиваться и строить проекты с другими людьми.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Как найти подходящего участника?</span><i class="fas fa-plus"></i>
+        </button>
+        <div class="faq-a">Используй раздел «Обзор» - фильтруй по навыкам, смотри профили, читай о целях и статусе. Если человек открыт для коллаборации - просто напиши ему или предложи партнёрство.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Что такое «коллаборация»?</span><i class="fas fa-plus"></i>
+        </button>
+        <div class="faq-a">Это специальное предложение о совместной работе. В отличие от обычного сообщения, предложение коллаборации попадает в уведомления и ленту активности - чтобы человек точно его заметил.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Данные хранятся безопасно?</span><i class="fas fa-plus"></i>
+        </button>
+        <div class="faq-a">Это учебный проект. Все данные хранятся локально в вашем браузере (localStorage) и не передаются на серверы. Не используй реальные пароли от других сервисов.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Можно ли создать несколько проектов?</span><i class="fas fa-plus"></i>
+        </button>
+        <div class="faq-a">Да, количество проектов не ограничено. Заполняй стадию, теги и кого ищешь - так больше людей найдут именно твой проект.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section" id="cta-section">
+    <div class="cta-inner">
+      <div class="cta-orb"></div>
+      <div class="cta-content">
+        <div class="section-eyebrow light">Для студентов</div>
+        <h2>Готов найти свою команду?</h2>
+        <p>Регистрация бесплатна. Присоединяйся и начинай создавать прямо сейчас.</p>
+        <button class="btn-hero" onclick="openModal('register-modal')">
+          <span>Создать аккаунт</span><i class="fas fa-sparkles"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════
+     VIEW: EXPLORE (SEARCH)
+══════════════════════════════════════ -->
+<section id="view-explore" class="view">
+  <div class="page-wrap">
+    <div class="page-hero-sm">
+      <h1 class="page-title">Обзор <span class="gradient-text">студентов</span></h1>
+      <p class="page-sub">Находи людей по навыкам, целям и интересам</p>
+    </div>
+    <div class="explore-toolbar">
+      <div class="search-field">
+        <i class="fas fa-magnifying-glass"></i>
+        <input type="text" id="explore-search" placeholder="Поиск по имени, навыкам, университету..." oninput="handleExploreSearch()">
+        <button class="clear-search" id="clear-search" onclick="clearExploreSearch()" style="display:none"><i class="fas fa-xmark"></i></button>
+      </div>
+      <div class="skill-filter-chips" id="skill-chips">
+        <button class="skill-chip active" onclick="setSkillChip(this,null)">Все</button>
+        <button class="skill-chip" onclick="setSkillChip(this,'Python')">Python</button>
+        <button class="skill-chip" onclick="setSkillChip(this,'JavaScript')">JavaScript</button>
+        <button class="skill-chip" onclick="setSkillChip(this,'Дизайн')">Дизайн</button>
+        <button class="skill-chip" onclick="setSkillChip(this,'ML')">ML</button>
+        <button class="skill-chip" onclick="setSkillChip(this,'Маркетинг')">Маркетинг</button>
+        <button class="skill-chip" onclick="setSkillChip(this,'UI/UX')">UI/UX</button>
+        <button class="skill-chip" onclick="setSkillChip(this,'Английский')">Английский</button>
+      </div>
+    </div>
+    <div class="results-meta" id="explore-meta">Загрузка...</div>
+    <div class="users-grid" id="explore-grid"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     VIEW: PROJECTS
+══════════════════════════════════════ -->
+<section id="view-projects" class="view">
+  <div class="page-wrap">
+    <div class="page-hero-sm">
+      <h1 class="page-title">Проекты <span class="gradient-text">студентов</span></h1>
+      <p class="page-sub">Присоединяйся к команде или создай свой проект</p>
+      <button id="create-proj-btn" class="btn-primary-sm hidden" onclick="openCreateProject()">
+        <i class="fas fa-plus"></i> Создать проект
+      </button>
+    </div>
+    <div class="proj-toolbar">
+      <div class="search-field">
+        <i class="fas fa-magnifying-glass"></i>
+        <input type="text" id="proj-search" placeholder="Поиск проектов..." oninput="handleProjSearch()">
+      </div>
+      <div class="skill-filter-chips">
+        <button class="skill-chip active" onclick="setProjFilter(this,null)">Все</button>
+        <button class="skill-chip" onclick="setProjFilter(this,'Python')">Python</button>
+        <button class="skill-chip" onclick="setProjFilter(this,'JavaScript')">JavaScript</button>
+        <button class="skill-chip" onclick="setProjFilter(this,'Дизайн')">Дизайн</button>
+        <button class="skill-chip" onclick="setProjFilter(this,'Маркетинг')">Маркетинг</button>
+        <button class="skill-chip" onclick="setProjFilter(this,'ML')">ML</button>
+        <button class="skill-chip" onclick="setProjFilter(this,'UI/UX')">UI/UX</button>
+      </div>
+    </div>
+    <div class="projects-grid" id="projects-grid"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     VIEW: FEED (Activity)
+══════════════════════════════════════ -->
+<section id="view-feed" class="view">
+  <div class="page-wrap feed-layout">
+    <div class="feed-main">
+      <div class="page-hero-sm">
+        <h1 class="page-title">Лента <span class="gradient-text">активности</span></h1>
+        <p class="page-sub">Что происходит в сообществе прямо сейчас</p>
+      </div>
+      <div id="feed-list" class="feed-list"></div>
+    </div>
+    <aside class="feed-sidebar">
+      <div class="sidebar-card">
+        <div class="sidebar-title"><i class="fas fa-fire"></i> Топ навыков</div>
+        <div id="top-skills-list"></div>
+      </div>
+      <div class="sidebar-card">
+        <div class="sidebar-title"><i class="fas fa-bolt"></i> Новые проекты</div>
+        <div id="sidebar-projects"></div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     VIEW: MESSAGES
+══════════════════════════════════════ -->
+<section id="view-messages" class="view">
+  <div class="messages-layout">
+    <div class="msg-sidebar">
+      <div class="msg-sidebar-header">
+        <h3>Сообщения</h3>
+        <div class="msg-search"><i class="fas fa-search"></i><input type="text" placeholder="Поиск..." oninput="filterConversations(this.value)"></div>
+      </div>
+      <div id="conv-list"></div>
+    </div>
+    <div class="msg-body" id="msg-body">
+      <div class="msg-empty-state" id="msg-empty">
+        <div class="msg-empty-icon"><i class="fas fa-comments"></i></div>
+        <h3>Выберите диалог</h3>
+        <p>Напишите кому-нибудь первым!</p>
+        <button class="btn-primary-sm" onclick="showView('explore')"><i class="fas fa-compass"></i> Найти людей</button>
+      </div>
+      <div class="msg-chat" id="msg-chat" style="display:none">
+        <div class="chat-topbar">
+          <div class="chat-topbar-user">
+            <div class="chat-av" id="chat-av"></div>
+            <div>
+              <div class="chat-name" id="chat-name"></div>
+              <div class="chat-status" id="chat-subtitle">в сети</div>
+            </div>
+          </div>
+          <div class="chat-topbar-actions" id="chat-topbar-actions"></div>
+        </div>
+        <div class="chat-messages" id="chat-messages"></div>
+        <!-- предпросмотр прикреплённого файла -->
+        <div class="file-preview-bar" id="file-preview-bar" style="display:none">
+          <div class="file-preview-info">
+            <i class="fas fa-paperclip"></i>
+            <span id="file-preview-name"></span>
+            <span id="file-preview-size" class="file-preview-size"></span>
+          </div>
+          <button type="button" class="icon-btn" onclick="clearAttachment()" title="Убрать файл"><i class="fas fa-times"></i></button>
+        </div>
+        <!-- emoji picker panel (скрыт по умолчанию) -->
+        <div class="emoji-picker" id="emoji-picker">
+          <div class="emoji-picker-header">
+            <div class="emoji-cats">
+              <button class="emoji-cat active" onclick="switchEmojiCat(this,'smileys')" title="Смайлы">😊</button>
+              <button class="emoji-cat" onclick="switchEmojiCat(this,'gestures')" title="Жесты">👋</button>
+              <button class="emoji-cat" onclick="switchEmojiCat(this,'objects')" title="Объекты">💡</button>
+              <button class="emoji-cat" onclick="switchEmojiCat(this,'symbols')" title="Символы">❤️</button>
+              <button class="emoji-cat" onclick="switchEmojiCat(this,'nature')" title="Природа">🌿</button>
+              <button class="emoji-cat" onclick="switchEmojiCat(this,'food')" title="Еда">🍕</button>
+              <button class="emoji-cat" onclick="switchEmojiCat(this,'travel')" title="Путешествия">✈️</button>
+              <button class="emoji-cat" onclick="switchEmojiCat(this,'activity')" title="Активность">⚽</button>
+            </div>
+          </div>
+          <div class="emoji-grid" id="emoji-grid"></div>
+        </div>
+        <!-- скрытый input для выбора файла -->
+        <input type="file" id="chat-file-input" style="display:none" onchange="handleFileAttach(this)">
+        <form class="chat-input-row" id="chat-form" onsubmit="sendMessage(event)">
+          <button type="button" class="icon-btn emoji-btn" id="emoji-toggle-btn" onclick="toggleEmojiPicker()" title="Эмодзи"><i class="far fa-face-smile"></i></button>
+          <button type="button" class="icon-btn" onclick="$('chat-file-input').click()" title="Прикрепить файл"><i class="fas fa-paperclip"></i></button>
+          <input class="chat-input" id="chat-input" type="text" placeholder="Написать сообщение..." autocomplete="off">
+          <button type="submit" class="send-btn"><i class="fas fa-paper-plane"></i></button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     VIEW: PROFILE
+══════════════════════════════════════ -->
+<section id="view-profile" class="view">
+  <div class="page-wrap">
+    <div class="profile-card-full">
+      <!-- Banner -->
+      <div class="profile-banner" id="profile-banner">
+        <div class="banner-pattern" id="banner-pattern"></div>
+        <img id="banner-img" src="" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;">
+      </div>
+      <!-- Main info -->
+      <div class="profile-main-info">
+        <div class="profile-av-wrap">
+          <div class="profile-av" id="profile-av">АА</div>
+          <div class="profile-online-badge"></div>
+        </div>
+        <div class="profile-text-info">
+          <div class="profile-name-row">
+            <h1 id="p-name">Имя</h1>
+            <div class="profile-rating-badge" id="p-rating-badge" style="display:none">
+              <i class="fas fa-star"></i><span id="p-rating-val">0</span>
+            </div>
+          </div>
+          <div class="profile-meta-row">
+            <span id="p-email"><i class="fas fa-envelope"></i> email</span>
+            <span id="p-univ" style="display:none"><i class="fas fa-graduation-cap"></i> <span id="p-univ-text"></span></span>
+          </div>
+          <p class="profile-bio-text" id="p-bio">Нет описания</p>
+          <div class="profile-status-row" id="p-status-row" style="display:none">
+            <div class="status-badge" id="p-status-badge"></div>
+          </div>
+        </div>
+        <div class="profile-action-btns">
+          <button class="btn-primary-sm" onclick="showEditProfile()"><i class="fas fa-pen-to-square"></i> Редактировать</button>
+        </div>
+      </div>
+      <!-- Tabs -->
+      <div class="profile-tabs">
+        <button class="ptab active" onclick="switchProfileTab('skills',this)"><i class="fas fa-tools"></i> Навыки и цели</button>
+        <button class="ptab" onclick="switchProfileTab('projects',this)"><i class="fas fa-layer-group"></i> Мои проекты</button>
+        <button class="ptab" onclick="switchProfileTab('stats',this)"><i class="fas fa-chart-simple"></i> Статистика</button>
+      </div>
+      <div class="profile-tab-content">
+        <div id="ptab-skills" class="ptab-panel active">
+          <div class="ptab-section">
+            <h4><i class="fas fa-bullseye"></i> Цели</h4>
+            <div id="p-goals" class="tags-wrap"></div>
+          </div>
+          <div class="ptab-section">
+            <h4><i class="fas fa-wrench"></i> Навыки</h4>
+            <div id="p-skills" class="tags-wrap"></div>
+          </div>
+          <div class="ptab-section">
+            <h4><i class="fas fa-heart"></i> Интересы</h4>
+            <div id="p-interests" class="tags-wrap"></div>
+          </div>
+        </div>
+        <div id="ptab-projects" class="ptab-panel">
+          <div id="p-projects-grid" class="projects-grid"></div>
+        </div>
+        <div id="ptab-stats" class="ptab-panel">
+          <div class="stats-grid">
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-envelope"></i></div><div class="stat-val" id="stat-msgs">0</div><div class="stat-label">Сообщений отправлено</div></div>
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-handshake"></i></div><div class="stat-val" id="stat-collabs">0</div><div class="stat-label">Коллабораций</div></div>
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-layer-group"></i></div><div class="stat-val" id="stat-projects">0</div><div class="stat-label">Проектов создано</div></div>
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-star"></i></div><div class="stat-val" id="stat-rating">—</div><div class="stat-label">Средний рейтинг</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     VIEW: NOTIFICATIONS
+══════════════════════════════════════ -->
+<section id="view-notifications" class="view">
+  <div class="page-wrap" style="max-width:680px">
+    <div class="page-hero-sm">
+      <h1 class="page-title">Уведомления</h1>
+    </div>
+    <div id="notif-list"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     MODALS
+══════════════════════════════════════ -->
+
+<!-- LOGIN -->
+<div class="modal-overlay" id="login-modal" onclick="closeModalBg(event,'login-modal')">
+  <div class="modal-box modal-sm">
+    <button class="modal-close" onclick="closeModal('login-modal')"><i class="fas fa-xmark"></i></button>
+    <div class="modal-logo-brand">
+      <svg viewBox="0 0 36 36" fill="none" width="36" height="36">
+        <rect width="36" height="36" rx="10" fill="url(#lgLogin)"/>
+        <path d="M10 24 L18 10 L26 24" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="18" cy="27" r="2.5" fill="white"/>
+        <defs><linearGradient id="lgLogin" x1="0" y1="0" x2="36" y2="36"><stop stop-color="#6EE7B7"/><stop offset="1" stop-color="#3B82F6"/></linearGradient></defs>
+      </svg>
+      <span class="modal-brand-name">CollabStudy</span>
+    </div>
+    <h2 class="modal-title">С возвращением</h2>
+    <p class="modal-sub">Войди в свой аккаунт CollabStudy</p>
+    <form id="login-form" class="modal-form" onsubmit="handleLogin(event)">
+      <div class="field-group">
+        <label>Email</label>
+        <div class="input-icon-wrap"><i class="fas fa-envelope"></i><input type="email" id="login-email" placeholder="your@email.com" required></div>
+      </div>
+      <div class="field-group">
+        <label>Пароль</label>
+        <div class="input-icon-wrap"><i class="fas fa-lock"></i><input type="password" id="login-pass" placeholder="••••••••" required></div>
+      </div>
+      <div class="demo-hint">
+        <i class="fas fa-lightbulb"></i>
+        <span>Пример аккаунта: <strong>anna@example.com</strong> / <strong>password</strong></span>
+      </div>
+      <button type="submit" class="btn-full-primary">Войти <i class="fas fa-arrow-right"></i></button>
+    </form>
+    <div class="modal-switch">Нет аккаунта? <a href="#" onclick="switchModal('login-modal','register-modal')">Зарегистрироваться</a></div>
+  </div>
+</div>
+
+<!-- REGISTER -->
+<div class="modal-overlay" id="register-modal" onclick="closeModalBg(event,'register-modal')">
+  <div class="modal-box modal-sm">
+    <button class="modal-close" onclick="closeModal('register-modal')"><i class="fas fa-xmark"></i></button>
+    <div class="modal-logo-brand">
+      <svg viewBox="0 0 36 36" fill="none" width="36" height="36">
+        <rect width="36" height="36" rx="10" fill="url(#lgReg)"/>
+        <path d="M10 24 L18 10 L26 24" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="18" cy="27" r="2.5" fill="white"/>
+        <defs><linearGradient id="lgReg" x1="0" y1="0" x2="36" y2="36"><stop stop-color="#6EE7B7"/><stop offset="1" stop-color="#3B82F6"/></linearGradient></defs>
+      </svg>
+      <span class="modal-brand-name">CollabStudy</span>
+    </div>
+    <h2 class="modal-title">Создай аккаунт</h2>
+    <p class="modal-sub">Присоединяйся к сообществу студентов</p>
+    <form id="register-form" class="modal-form" onsubmit="handleRegister(event)">
+      <div class="field-group">
+        <label>Имя и фамилия</label>
+        <div class="input-icon-wrap"><i class="fas fa-user"></i><input type="text" id="reg-name" placeholder="Иван Иванов" required></div>
+      </div>
+      <div class="field-group">
+        <label>Email</label>
+        <div class="input-icon-wrap"><i class="fas fa-envelope"></i><input type="email" id="reg-email" placeholder="your@email.com" required></div>
+      </div>
+      <div class="field-group">
+        <label>Пароль</label>
+        <div class="input-icon-wrap"><i class="fas fa-lock"></i><input type="password" id="reg-pass" placeholder="Минимум 4 символа" required minlength="4"></div>
+      </div>
+      <button type="submit" class="btn-full-primary">Создать аккаунт <i class="fas fa-sparkles"></i></button>
+    </form>
+    <div class="modal-switch">Уже есть аккаунт? <a href="#" onclick="switchModal('register-modal','login-modal')">Войти</a></div>
+  </div>
+</div>
+
+<!-- EDIT PROFILE -->
+<div class="modal-overlay" id="edit-profile-modal" onclick="closeModalBg(event,'edit-profile-modal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('edit-profile-modal')"><i class="fas fa-xmark"></i></button>
+    <h2 class="modal-title">Редактировать профиль</h2>
+    <form id="edit-profile-form" class="modal-form" onsubmit="saveProfile(event)">
+
+      <!-- Фото -->
+      <div class="photo-upload-row">
+        <div class="photo-upload-item">
+          <div class="photo-upload-label">Фото профиля</div>
+          <div class="avatar-upload-wrap" onclick="triggerAvatarUpload()">
+            <div class="avatar-upload-preview" id="ep-avatar-preview">АА</div>
+            <div class="avatar-upload-overlay">
+              <i class="fas fa-camera"></i>
+              <span>Загрузить</span>
+            </div>
+          </div>
+          <input type="file" id="ep-avatar-file" accept="image/*" style="display:none" onchange="handleAvatarUpload(this)">
+          <button type="button" class="photo-remove-btn" id="ep-avatar-remove" style="display:none" onclick="removeAvatar()">
+            <i class="fas fa-xmark"></i> Убрать фото
+          </button>
+        </div>
+        <div class="photo-upload-item photo-upload-banner-item">
+          <div class="photo-upload-label">Обложка профиля</div>
+          <div class="banner-upload-wrap" onclick="triggerBannerUpload()">
+            <div class="banner-upload-preview" id="ep-banner-preview">
+              <div class="banner-upload-default"><i class="fas fa-image"></i><span>Нажмите для загрузки</span></div>
+            </div>
+            <div class="banner-upload-overlay">
+              <i class="fas fa-camera"></i>
+              <span>Сменить обложку</span>
+            </div>
+          </div>
+          <input type="file" id="ep-banner-file" accept="image/*" style="display:none" onchange="handleBannerUpload(this)">
+          <button type="button" class="photo-remove-btn" id="ep-banner-remove" style="display:none" onclick="removeBanner()">
+            <i class="fas fa-xmark"></i> Убрать обложку
+          </button>
+        </div>
+      </div>
+
+      <div class="form-divider"></div>
+
+      <div class="form-2col">
+        <div class="field-group">
+          <label>Имя и фамилия</label>
+          <input type="text" id="ep-name" placeholder="Иван Иванов" required>
+        </div>
+        <div class="field-group">
+          <label>Университет / Курс</label>
+          <input type="text" id="ep-univ" placeholder="МГУ, 3 курс">
+        </div>
+      </div>
+
+      <div class="form-2col">
+        <div class="field-group">
+          <label>Email (логин)</label>
+          <div class="input-icon-wrap"><i class="fas fa-envelope"></i><input type="email" id="ep-email" placeholder="your@email.com"></div>
+        </div>
+        <div class="field-group">
+          <label>Новый пароль <span class="field-hint">оставь пустым чтобы не менять</span></label>
+          <div class="input-icon-wrap"><i class="fas fa-lock"></i><input type="password" id="ep-pass" placeholder="••••••••" minlength="4"></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <label>О себе</label>
+        <textarea id="ep-bio" rows="3" placeholder="Расскажи о себе - кто ты и чем занимаешься..."></textarea>
+      </div>
+      <div class="form-2col">
+        <div class="field-group">
+          <label>Навыки <span class="field-hint">через запятую</span></label>
+          <input type="text" id="ep-skills" placeholder="Python, React, Figma...">
+        </div>
+        <div class="field-group">
+          <label>Цели <span class="field-hint">через запятую</span></label>
+          <input type="text" id="ep-goals" placeholder="Создать стартап, Выучить Go...">
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Интересы <span class="field-hint">через запятую</span></label>
+        <input type="text" id="ep-interests" placeholder="Путешествия, Музыка, Геймдев...">
+      </div>
+      <div class="field-group">
+        <label>Статус</label>
+        <select id="ep-status">
+          <option value="">- Выбери статус -</option>
+          <option value="open">🟢 Открыт для коллаборации</option>
+          <option value="busy">🟡 Занят, но смотрю предложения</option>
+          <option value="closed">🔴 Сейчас не ищу проекты</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-ghost" onclick="closeModal('edit-profile-modal')">Отмена</button>
+        <button type="submit" class="btn-primary-sm"><i class="fas fa-check"></i> Сохранить</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- CREATE PROJECT -->
+<div class="modal-overlay" id="create-project-modal" onclick="closeModalBg(event,'create-project-modal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('create-project-modal')"><i class="fas fa-xmark"></i></button>
+    <h2 class="modal-title">Новый проект</h2>
+    <p class="modal-sub">Расскажи о своей идее - найди команду мечты</p>
+    <form id="create-project-form" class="modal-form" onsubmit="handleCreateProject(event)">
+      <div class="field-group">
+        <label>Название проекта</label>
+        <input type="text" id="cp-title" placeholder="Например: FinTrack - умный учёт расходов" required>
+      </div>
+      <div class="field-group">
+        <label>Описание</label>
+        <textarea id="cp-desc" rows="4" placeholder="Расскажи подробнее об идее - что создаёшь, какая цель, чем проект уникален..." required></textarea>
+      </div>
+      <div class="form-2col">
+        <div class="field-group">
+          <label>Кого ищешь? <span class="field-hint">через запятую</span></label>
+          <input type="text" id="cp-needs" placeholder="React-разработчик, Дизайнер...">
+        </div>
+        <div class="field-group">
+          <label>Стадия проекта</label>
+          <select id="cp-stage">
+            <option value="idea">💡 Идея</option>
+            <option value="mvp">🔨 MVP</option>
+            <option value="beta">🚀 Бета</option>
+            <option value="active">✅ Активный</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Теги <span class="field-hint">через запятую</span></label>
+        <input type="text" id="cp-tags" placeholder="React, Python, стартап...">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-ghost" onclick="closeModal('create-project-modal')">Отмена</button>
+        <button type="submit" class="btn-primary-sm"><i class="fas fa-rocket"></i> Создать проект</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- COLLAB OFFER -->
+<div class="modal-overlay" id="collab-modal" onclick="closeModalBg(event,'collab-modal')">
+  <div class="modal-box modal-sm">
+    <button class="modal-close" onclick="closeModal('collab-modal')"><i class="fas fa-xmark"></i></button>
+    <h2 class="modal-title">Предложить коллаборацию</h2>
+    <div class="collab-recipient-card" id="collab-recipient-card"></div>
+    <form id="collab-form" class="modal-form" onsubmit="handleCollab(event)">
+      <div class="field-group">
+        <label>Твоё сообщение</label>
+        <textarea id="collab-msg" rows="4" placeholder="Привет! Я занимаюсь проектом X и ищу человека с твоими навыками..." required></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-ghost" onclick="closeModal('collab-modal')">Отмена</button>
+        <button type="submit" class="btn-primary-sm"><i class="fas fa-handshake"></i> Отправить</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- RATE USER -->
+<div class="modal-overlay" id="rate-modal" onclick="closeModalBg(event,'rate-modal')">
+  <div class="modal-box modal-sm">
+    <button class="modal-close" onclick="closeModal('rate-modal')"><i class="fas fa-xmark"></i></button>
+    <h2 class="modal-title">Оценить пользователя</h2>
+    <div id="rate-target-info" style="margin-bottom:20px"></div>
+    <div class="star-rating-row" id="star-rating">
+      <i class="fas fa-star sr" data-v="1" onclick="setRating(1)"></i>
+      <i class="fas fa-star sr" data-v="2" onclick="setRating(2)"></i>
+      <i class="fas fa-star sr" data-v="3" onclick="setRating(3)"></i>
+      <i class="fas fa-star sr" data-v="4" onclick="setRating(4)"></i>
+      <i class="fas fa-star sr" data-v="5" onclick="setRating(5)"></i>
+    </div>
+    <div class="star-label" id="star-label">Выберите оценку</div>
+    <div class="modal-footer">
+      <button class="btn-ghost" onclick="closeModal('rate-modal')">Отмена</button>
+      <button class="btn-primary-sm" onclick="submitRating()"><i class="fas fa-check"></i> Оценить</button>
+    </div>
+  </div>
+</div>
+
+<!-- USER PROFILE POPUP (view other user) -->
+<div class="modal-overlay" id="user-popup" onclick="closeModalBg(event,'user-popup')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('user-popup')"><i class="fas fa-xmark"></i></button>
+    <div id="user-popup-content"></div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div id="toasts"></div>
+
+<!-- LOADING OVERLAY -->
+<div id="page-loader" class="page-loader">
+  <div class="loader-inner">
+    <svg class="loader-logo" viewBox="0 0 36 36" fill="none">
+      <rect width="36" height="36" rx="10" fill="url(#lg2)"/>
+      <path d="M10 24 L18 10 L26 24" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="18" cy="27" r="2.5" fill="white"/>
+      <defs><linearGradient id="lg2" x1="0" y1="0" x2="36" y2="36"><stop stop-color="#6EE7B7"/><stop offset="1" stop-color="#3B82F6"/></linearGradient></defs>
+    </svg>
+    <div class="loader-text">CollabStudy</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <svg viewBox="0 0 36 36" fill="none" width="32" height="32">
+            <rect width="36" height="36" rx="10" fill="url(#lgf)"/>
+            <path d="M10 24 L18 10 L26 24" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="18" cy="27" r="2.5" fill="white"/>
+            <defs><linearGradient id="lgf" x1="0" y1="0" x2="36" y2="36"><stop stop-color="#6EE7B7"/><stop offset="1" stop-color="#3B82F6"/></linearGradient></defs>
+          </svg>
+          <span>CollabStudy</span>
+        </div>
+        <p class="footer-tagline">Найди команду. Создай проект.<br>Вырасти вместе.</p>
+        <div class="footer-socials">
+          <a href="https://t.me/ssllate" target="_blank" class="social-btn" title="Telegram"><i class="fab fa-telegram"></i></a>
+          <a href="https://www.instagram.com/ssllate/" target="_blank" class="social-btn" title="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <div class="footer-col-title">Навигация</div>
+          <a href="#" onclick="showView('home')">Главная</a>
+          <a href="#" onclick="showView('explore')">Обзор студентов</a>
+          <a href="#" onclick="showView('projects')">Проекты</a>
+          <a href="#" onclick="showView('feed')">Лента активности</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Навыки</div>
+          <a href="#" onclick="goToExploreSkill('Python')">Python / ML</a>
+          <a href="#" onclick="goToExploreSkill('Дизайн')">Дизайн / UX</a>
+          <a href="#" onclick="goToExploreSkill('JavaScript')">JavaScript</a>
+          <a href="#" onclick="goToExploreSkill('Маркетинг')">Маркетинг</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Аккаунт</div>
+          <a href="#" onclick="openModal('register-modal')">Зарегистрироваться</a>
+          <a href="#" onclick="openModal('login-modal')">Войти</a>
+          <a href="#" onclick="showView('profile')">Мой профиль</a>
+          <a href="#" onclick="showView('notifications')">Уведомления</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">2026 CollabStudy</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Electron integration: handle clear-storage from menu
+if (window.electronAPI) {
+  window.electronAPI.onClearStorage(function() {
+    localStorage.clear();
+    location.reload();
+  });
+}
+</script>
+<script src="src/js/db.js"></script>
+<script src="src/js/utils.js"></script>
+<script src="src/js/navigation.js"></script>
+<script src="src/js/auth.js"></script>
+<script src="src/js/render.js"></script>
+<script src="src/js/home.js"></script>
+<script src="src/js/explore.js"></script>
+<script src="src/js/projects.js"></script>
+<script src="src/js/feed.js"></script>
+<script src="src/js/messages.js"></script>
+<script src="src/js/profile.js"></script>
+<script src="src/js/notifications.js"></script>
+<script src="src/js/collab.js"></script>
+<script src="src/js/init.js"></script>
+
+</body>
+</html>

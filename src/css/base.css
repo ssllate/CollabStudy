@@ -1,0 +1,124 @@
+/* переменные, темы, reset, шрифты */
+
+/* root tokens */
+:root {
+  /* core palette */
+  --c-bg:         #080c14;
+  --c-surface:    #0e1420;
+  --c-surface2:   #141c2e;
+  --c-surface3:   #1a2238;
+  --c-border:     rgba(255,255,255,0.07);
+  --c-border2:    rgba(255,255,255,0.12);
+
+  /* text */
+  --c-text:       #f0f4ff;
+  --c-text-2:     #8892a8;
+  --c-text-3:     #4e5a72;
+
+  /* accent palette */
+  --accent-green:  #6ee7b7;
+  --accent-blue:   #3b82f6;
+  --accent-purple: #a78bfa;
+  --accent-amber:  #fbbf24;
+  --accent-rose:   #fb7185;
+  --accent-cyan:   #22d3ee;
+  --accent-orange: #fb923c;
+
+  /* gradient */
+  --grad-main:    linear-gradient(135deg, #6ee7b7 0%, #3b82f6 100%);
+  --grad-warm:    linear-gradient(135deg, #fbbf24 0%, #fb923c 100%);
+  --grad-purple:  linear-gradient(135deg, #a78bfa 0%, #3b82f6 100%);
+
+  /* shadows */
+  --shadow-sm:    0 1px 4px rgba(0,0,0,.4);
+  --shadow:       0 4px 20px rgba(0,0,0,.5);
+  --shadow-lg:    0 12px 48px rgba(0,0,0,.6);
+  --shadow-glow:  0 0 40px rgba(110,231,183,.12);
+
+  /* layout */
+  --nav-h: 68px;
+  --page-max: 1220px;
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-full: 9999px;
+
+  /* motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur: 0.25s;
+}
+
+/* light theme */
+[data-theme="light"] {
+  --c-bg:       #f4f6fb;
+  --c-surface:  #ffffff;
+  --c-surface2: #f0f3fa;
+  --c-surface3: #e8ecf5;
+  --c-border:   rgba(0,0,0,0.07);
+  --c-border2:  rgba(0,0,0,0.13);
+  --c-text:     #0d1526;
+  --c-text-2:   #4e5a72;
+  --c-text-3:   #8892a8;
+  --shadow-sm:  0 1px 4px rgba(0,0,0,0.1);
+  --shadow:     0 4px 20px rgba(0,0,0,0.1);
+  --shadow-lg:  0 12px 48px rgba(0,0,0,0.12);
+  --shadow-glow:0 0 40px rgba(59,130,246,.1);
+}
+
+/* system font fallbacks — site works instantly without Google Fonts */
+:root {
+  --ff-body: 'DM Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --ff-display: 'Manrope', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{
+  font-family: var(--ff-body);
+  background:var(--c-bg);
+  color:var(--c-text);
+  line-height:1.65;
+  min-height:100vh;
+  overflow-x:hidden;
+  transition:background .4s var(--ease-in-out), color .4s var(--ease-in-out);
+}
+
+/* canvas bg */
+#bg-canvas{
+  position:fixed;inset:0;
+  pointer-events:none;
+  z-index:0;
+  opacity:.55;
+}
+
+/* cursor glow */
+#cursor-glow{
+  position:fixed;
+  width:400px;height:400px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(59,130,246,.06) 0%, transparent 70%);
+  pointer-events:none;
+  z-index:1;
+  transform:translate(-50%,-50%);
+  transition:left .15s, top .15s;
+  will-change:left,top;
+}
+
+/* page loader */
+.page-loader{
+  position:fixed;inset:0;
+  background:var(--c-bg);
+  z-index:9999;
+  display:none; /* hidden by default — no blocking wait */
+  align-items:center;justify-content:center;
+  transition:opacity .5s var(--ease-out), visibility .5s;
+}
+.page-loader.visible{display:flex;}
+.page-loader.hidden{opacity:0;visibility:hidden;display:none;}
+.loader-inner{display:flex;flex-direction:column;align-items:center;gap:14px;}
+.loader-logo{width:56px;height:56px;animation:loaderPulse 1.2s ease-in-out infinite;}
+@keyframes loaderPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.1);}}
+.loader-text{font-family:var(--ff-display);font-size:1.1rem;font-weight:700;
+  background:var(--grad-main);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
