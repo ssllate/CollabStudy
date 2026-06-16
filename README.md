@@ -13,13 +13,13 @@ CollabStudy — десктопное Electron-приложение для сов
 ## 🎬 Демо
 
 ### 🏠 Главная
-![Home](assets/gif/login.gifmain(GIF).gif)
+![Home](assets/gif/main(GIF).gif)
 
 ### 🧭 Навигация по интерфейсу и окно авторизации
-![Login](assets/gif/login.gifmiscsite(GIF).gif)
+![Login](assets/gif/miscsite(GIF).gif)
 
 ### 🌗 Тема оформления (dark / light)
-![Projects](assets/gif/login.gifblackANDwhite_theme(GIF).gif)
+![Projects](assets/gif/blackANDwhite_theme(GIF).gif)
 
 ---
 
