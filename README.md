@@ -1,7 +1,7 @@
 🌐 Live demo: https://ssllate.github.io/CollabStudy/
 
 # CollabStudy
-Diplom
+CollabStudy — десктопное Electron-приложение для совместного обучения, управления проектами и общения студентов с офлайн-работой и локальным хранением данных.
 =======
 # CollabStudy — Десктопное приложение
 
