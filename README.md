@@ -1,6 +1,6 @@
 # CollabStudy
 
-🌐 Live demo:  
+Live demo:  
 [![Open Site](https://img.shields.io/badge/Open%20Site-CollabStudy-blue?style=for-the-badge)](https://ssllate.github.io/CollabStudy/)
 
 ---
@@ -10,15 +10,15 @@ CollabStudy — десктопное Electron-приложение для сов
 
 ---
 
-## 🎬 Демо
+## Обзор интерфейса
 
-### 🏠 Главная
+### Главная
 ![Home](assets/gif/main.gif)
 
-### 🧭 Навигация по интерфейсу и окно авторизации
+### Навигация по интерфейсу и окно авторизации
 ![Login](assets/gif/miscsite.gif)
 
-### 🌗 Тема оформления (dark / light)
+### Тема оформления (dark / light)
 ![Themes](assets/gif/blackANDwhite_theme.gif)
 
 ---
@@ -61,7 +61,7 @@ npm run build:mac
 npm run build:linux
 ```
 
-> ⚠️ Сборка под каждую платформу должна выполняться на соответствующей ОС (Windows → .exe, macOS → .dmg, Linux → .AppImage).
+> !ПРИМЕЧАНИЕ! Сборка под каждую платформу должна выполняться на соответствующей ОС (Windows → .exe, macOS → .dmg, Linux → .AppImage).
 
 ---
 
